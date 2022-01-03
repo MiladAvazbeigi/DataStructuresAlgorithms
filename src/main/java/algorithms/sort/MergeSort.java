@@ -80,24 +80,28 @@ public class MergeSort <T extends Comparable<T>>{
     }
 
     public static void main(String[] args) throws Exception {
-        // Random Array
         int experiments_number = 1000;
+        int repetitions = 100;
         double[] running_time = new double[experiments_number];
         double[] problem_size = new double[experiments_number];
         for(int i=0; i < experiments_number; i++){
-            int array_len = 1000*(i+1);
-            var random_array = new Integer[array_len];
-            for (int j=0; j < array_len;j++){
-                random_array[j] = ThreadLocalRandom.current().nextInt(-1000, 1000 + 1);
+            int array_len = 100*(i+1);
+            long timeElapsed = 0;
+            for(int j=0; j < repetitions;j++){
+                // Random Array
+                var random_array = new Integer[array_len];
+                for (int k=0; k < array_len;k++){
+                    random_array[k] = ThreadLocalRandom.current().nextInt(-1000, 1000 + 1);
+                }
+                // Sorting
+                long start = System.currentTimeMillis();
+                var merge_sort = new MergeSort<Integer>(random_array);
+                merge_sort.sort();
+                long finish = System.currentTimeMillis();
+                timeElapsed = timeElapsed + finish - start;
             }
-            // Sorting
-            long start = System.currentTimeMillis();
-            var merge_sort = new MergeSort<Integer>(random_array);
-            merge_sort.sort();
-            long finish = System.currentTimeMillis();
-            long timeElapsed = finish - start;
             problem_size[i] = array_len;
-            running_time[i] = timeElapsed;
+            running_time[i] = timeElapsed/repetitions;
         }
         // ------------
         // Region: Plot
