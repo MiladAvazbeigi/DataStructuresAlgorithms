@@ -12,7 +12,7 @@ public class QuickSort<T extends Comparable<T>> {
      * ------------- <br/>
      * The class provides the recursive implementation of the QuickSort. Quick Sort algorithm is a divide and
      * conquer algorithm with time complexity O(nlogn) on average. The algorithm picks an element of the array as 'pivot'.
-     * Then it finds the right location of the pivot by dividing the array into two sub-arrays where one has all the
+     * Then, it finds the right location of the pivot by dividing the array into two sub-arrays where one has all the
      * elements smaller than the pivot and one with all the elements larger than the pivot. Then, the algorithm is
      * repeated for the two sub-arrays. Finally, the two merged sub-arrays are merged with time complexity O(n).
      * <br/><br/>
