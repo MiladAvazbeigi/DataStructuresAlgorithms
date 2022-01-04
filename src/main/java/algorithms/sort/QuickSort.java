@@ -10,11 +10,13 @@ public class QuickSort<T extends Comparable<T>> {
     /**
      * Description <br/>
      * ------------- <br/>
-     * The class provides the recursive implementation of the QuickSort. Quick Sort algorithm is a divide and
+     * The class provides the recursive implementation of the 'QuickSort'. 'Quick Sort' algorithm is a divide and
      * conquer algorithm with time complexity O(nlogn) on average. The algorithm picks an element of the array as 'pivot'.
      * Then, it finds the right location of the pivot by dividing the array into two sub-arrays where one has all the
      * elements smaller than the pivot and one with all the elements larger than the pivot. Then, the algorithm is
-     * repeated for the two sub-arrays. Finally, the two merged sub-arrays are merged with time complexity O(n).
+     * repeated for the two sub-arrays. Finally, the two merged sub-arrays are merged with time complexity O(n). The
+     * popularity of the algorithm is due to the fast that all the changes are happening in place with no need of
+     * copying or creating new arrays.
      * <br/><br/>
      * Notes <br/>
      * -------- <br/>
@@ -87,7 +89,7 @@ public class QuickSort<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) throws Exception {
-        int experiments_number = 10000;
+        int experiments_number = 100;
         int repetitions = 10;
         double[] running_time = new double[experiments_number];
         double[] problem_size = new double[experiments_number];
