@@ -1,9 +1,5 @@
 package algorithms.sort;
 
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
-
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuickSort<T extends Comparable<T>> {
@@ -26,22 +22,38 @@ public class QuickSort<T extends Comparable<T>> {
      */
     private T[] sort_array;
 
+    // -----------------------------
+    // Region: getArray and setArray
+    // -----------------------------
+    public T[] getArray() {
+        return this.sort_array;
+    }
+    public void setArray(T[] sort_array) {
+        this.sort_array = sort_array;
+    }
+    // ---------------------------------
+    // End Region: getArray and setArray
+    // ---------------------------------
+
     // --------------------
     // Region: Constructors
     // --------------------
-    public QuickSort(T[] input_array) {
-        this.sort_array = input_array;
+    public QuickSort(T[] input_array, boolean copy){
+        if(copy){
+            setArray(input_array.clone());
+        }else{
+            setArray(input_array);
+        }
     }
     // ------------------------
     // End Region: Constructors
     // ------------------------
 
     public void sort(){
-        var quick_sort = new QuickSort<T>(this.sort_array);
-        quick_sort.sort(this.sort_array, 0, this.sort_array.length-1);
+        this.sort(this.sort_array, 0, this.sort_array.length-1);
     }
 
-    public void sort(T[] array, int start, int end){
+    private void sort(T[] array, int start, int end){
         if(start<=end){
             int pivot_location = partition(array, start, end);
             sort(array, start, pivot_location-1);
@@ -86,47 +98,5 @@ public class QuickSort<T extends Comparable<T>> {
         // --------------------------
         // End Region: Pivot Location
         // --------------------------
-    }
-
-    public static void main(String[] args) throws Exception {
-        int experiments_number = 100;
-        int repetitions = 10;
-        double[] running_time = new double[experiments_number];
-        double[] problem_size = new double[experiments_number];
-        for(int i=0; i < experiments_number; i++){
-            int array_len = 100*(i+1);
-            long timeElapsed = 0;
-            for(int j=0; j < repetitions;j++){
-                // Random Array
-                var random_array = new Integer[array_len];
-                for (int k=0; k < array_len;k++){
-                    random_array[k] = ThreadLocalRandom.current().nextInt(-1000000, 10000000 + 1);
-                }
-                // Sorting
-                long start = System.currentTimeMillis();
-                var quick_sort = new QuickSort<Integer>(random_array);
-                quick_sort.sort();
-                // Checking if the array is sorted
-                for(int k=0;k<array_len-1;k++){
-                    if(quick_sort.sort_array[k]>quick_sort.sort_array[k+1]){
-                        System.out.println(k);
-                        System.out.println("Test failed!");
-                    }
-                }
-                long finish = System.currentTimeMillis();
-                timeElapsed = timeElapsed + finish - start;
-            }
-            problem_size[i] = array_len;
-            running_time[i] = timeElapsed/repetitions;
-        }
-        // ------------
-        // Region: Plot
-        // ------------
-        XYChart chart = QuickChart.getChart("Running time", "n", "t", "t(n)", problem_size, running_time);
-        new SwingWrapper(chart).displayChart();
-        // ----------------
-        // End Region: Plot
-        // ----------------
-        System.out.println("Experiments Finished!");
     }
 }

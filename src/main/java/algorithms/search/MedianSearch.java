@@ -3,14 +3,51 @@ package algorithms.search;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MedianSearch <T extends Comparable<T>>{
+    /**
+     * Description  <br/>
+     * --------------- <br/>
+     * The class finds the median of an input array of objects implementing interface Comparable<T>.
+     * The search is essentially a variation of quick sort where a pivot is selected randomly and then the array
+     * is divided into two sub-arrays where one has all the elements less than equal the pivot and the other has elements
+     * larger. In other words, pivot is the right place. Finally, the pivot location is compared to the location of the
+     * median. If pivot is in the median location then it is the pivot. If not, the subarray including the position of
+     * median is selected and the procedure is repeated. <br/>
+     * <br/>
+     * Note <br/>
+     * ----------- <br/>
+     * The code can be easily used to find the i-th element in the array. <br/>
+     * <br/>
+     * Example <br/>
+     * -----------<br/>
+     * >>> var median_search = new MedianSearch<Integer>(random_array);<br/>
+     * >>> median_search.findMedian();<br/>
+     * @author: Milad Avazbeigi
+     */
     private T[] input_array;
     private int median_location; // left median in for array with even number of members
+
+    // -----------------------------
+    // Region: getArray and setArray
+    // -----------------------------
+    public T[] getArray() {
+        return this.input_array;
+    }
+    public void setArray(T[] input_array) {
+        this.input_array = input_array;
+    }
+    // -----------------------------
+    // Region: getArray and setArray
+    // -----------------------------
 
     // --------------------
     // Region: Constructors
     // --------------------
-    public MedianSearch(T[] input_array) {
-        this.input_array = input_array;
+    public MedianSearch(T[] input_array, boolean copy) {
+        if(copy){
+            this.input_array = input_array.clone();
+        }else{
+            this.input_array = input_array;
+        }
         if(this.input_array.length %2 == 0){
             this.median_location = this.input_array.length/2-1;
         }else{
@@ -21,12 +58,12 @@ public class MedianSearch <T extends Comparable<T>>{
     // End Region: Constructors
     // ------------------------
 
-    public void findMedian(){
-        var median_search = new MedianSearch<T>(this.input_array);
-        median_search.findMedian(this.input_array, 0, this.input_array.length-1);
+    public int findMedian(){
+        this.findMedian(this.input_array, 0, this.input_array.length-1);
+        return this.median_location;
     }
 
-    public void findMedian(T[] array, int start, int end){
+    private void findMedian(T[] array, int start, int end){
         if(start<=end) {
             int pivot_location = partition(array, start, end);
             if (pivot_location != this.median_location) {
@@ -78,28 +115,5 @@ public class MedianSearch <T extends Comparable<T>>{
         // --------------------------
         // End Region: Pivot Location
         // --------------------------
-    }
-
-    public static void main(String[] args){
-        for(int t=0;t<10000;t++) {
-            int array_len = 1000;
-            var random_array = new Integer[array_len];
-            for (int k = 0; k < array_len; k++) {
-                random_array[k] = ThreadLocalRandom.current().nextInt(-1000, 1000 + 1);
-            }
-            var median_search = new MedianSearch<Integer>(random_array);
-            median_search.findMedian();
-            // check if median is correct
-            for (int i = 0; i < median_search.median_location; i++) {
-                if (median_search.input_array[i] > median_search.input_array[median_search.median_location]) {
-                    System.out.println("Test failed!");
-                }
-            }
-            for (int i = median_search.median_location + 1; i < median_search.input_array.length; i++) {
-                if (median_search.input_array[i] < median_search.input_array[median_search.median_location]) {
-                    System.out.println("Test failed!");
-                }
-            }
-        }
     }
 }
