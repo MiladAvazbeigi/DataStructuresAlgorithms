@@ -1,8 +1,8 @@
 package algorithms.search;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Hashtable;
 
-public class MaximumSubarray<T extends Comparable<T>>{
+public class MaximumSubarray<T extends Number & Comparable<T>>{
     /**
      * Description  <br/>
      * --------------- <br/>
@@ -19,87 +19,85 @@ public class MaximumSubarray<T extends Comparable<T>>{
      * @author: Milad Avazbeigi
      */
     private T[] input_array;
-    private int search_location; // left median in for array with even number of members
 
     // --------------------
     // Region: Constructors
     // --------------------
-    public MaximumSubarray(T[] input_array, int i) throws Exception {
+    public MaximumSubarray(T[] input_array) throws Exception {
         this.input_array = input_array;
-        if(i < input_array.length && i>=0){
-            this.search_location = i;
-        }else{
-            throw new Exception();
-        }
     }
     // ------------------------
     // End Region: Constructors
     // ------------------------
 
-    public T findIthElement(int i) throws Exception {
-        var search_handl = new MaximumSubarray<T>(this.input_array, i);
-        return search_handl.findIthElement(this.input_array, 0, this.input_array.length-1);
+    public Hashtable search() throws Exception {
+        return this.search(this.input_array, 0, this.input_array.length-1);
     }
 
-    public T findIthElement(T[] array, int start, int end){
-        if(start==end){
-            return array[start];
-        }else {
-            int pivot_location = partition(array, start, end);
-            if(pivot_location == this.search_location){
-                return array[this.search_location];
+    private Hashtable search(T[] array, int start, int end){
+        if(start<=end){
+            if(start==end){
+                Hashtable output = new Hashtable();
+                output.put("Start", start);
+                output.put("End", end);
+                output.put("Sum", this.input_array[start].floatValue());
+                return output;
+            }else {
+                int pivot_location = (start+end)/2;
+                Hashtable output = new Hashtable();
+                Hashtable left_max_subarray = this.search(array, start, pivot_location - 1);
+                Hashtable right_max_subarray = this.search(array, pivot_location + 1, end);
+                Hashtable crossing_max_subarray = this.maximumCrossingSubarray(start, pivot_location, end);
+                if((float)crossing_max_subarray.get("Sum")>(float)right_max_subarray.get("Sum") && (float)crossing_max_subarray.get("Sum")>(float)left_max_subarray.get("Sum")){
+                    output = crossing_max_subarray;
+                }else{
+                    if((float)left_max_subarray.get("Sum")>(float)right_max_subarray.get("Sum")){
+                        output = left_max_subarray;
+                    }
+                    if((float)left_max_subarray.get("Sum")<=(float)right_max_subarray.get("Sum")){
+                        output = right_max_subarray;
+                    }
+                }
+                return output;
             }
-            if (this.search_location < pivot_location) {
-                return findIthElement(array, start, pivot_location - 1);
-            } else {
-                return findIthElement(array, pivot_location + 1, end);
-            }
+        }else{
+            Hashtable output = new Hashtable();
+            output.put("Start", start);
+            output.put("End", end);
+            output.put("Sum", -Float.MAX_VALUE);
+            return output;
         }
     }
 
-    private int partition(T[] array, int start, int end){
-        // --------------------
-        // Region: Random Pivot
-        // --------------------
-        int initial_pivot_index = ThreadLocalRandom.current().nextInt(start, end + 1);
-        T pivot_value = array[initial_pivot_index];
-        array[initial_pivot_index] = array[end];
-        array[end] = pivot_value; // pivot is moved to the end making operations easier
-        // ------------------------
-        // End Region: Random Pivot
-        // ------------------------
-
-        // ------------
-        // Region: Swap
-        // ------------
-        int i = start -1; // the numbers with index less than equal i are less than pivot i.e. arr[i+1]>pivor_value
-        for(int j=start; j<end;j++){
-            if(array[j].compareTo(pivot_value) < 0){
-                var swap = array[j];
-                array[j] = array[i+1];
-                array[i+1] = swap;
-                i++;
+    private Hashtable maximumCrossingSubarray(int start, int pivot_location, int end){
+        int i = pivot_location;
+        int j = pivot_location+1;
+        int istar=pivot_location;
+        int jstar=pivot_location+1;
+        float lef_maxsum = 0f;
+        float lef_sum = 0f;
+        while(i>=start){
+            lef_sum += this.input_array[i].floatValue();
+            if (lef_sum >= lef_maxsum){
+                istar = i;
+                lef_maxsum = lef_sum;
             }
+            i--;
         }
-        // ----------------
-        // End Region: Swap
-        // ----------------
-
-        // ----------------------
-        // Region: Pivot Location
-        // ----------------------
-        array[end] = array[i+1];
-        array[i+1] = pivot_value;
-        return i+1;
-        // --------------------------
-        // End Region: Pivot Location
-        // --------------------------
-    }
-
-    public static void main(String[] args) throws Exception {
-        // -9 -6 0 1 2 5 6 7 76 7666
-        Integer[] random_array = new Integer[]{6,2,7, 0, 1,5, -6, -9, 7666, 76};
-        var search_hndl = new MaximumSubarray<Integer>(random_array, 1);
-        System.out.println(search_hndl.findIthElement(4));
+        float right_maxsum = 0f;
+        float right_sum = 0f;
+        while(j<=end){
+            right_sum += this.input_array[j].floatValue();
+            if (right_sum >= right_maxsum){
+                jstar = j;
+                right_maxsum= right_sum;
+            }
+            j++;
+        }
+        Hashtable output = new Hashtable();
+        output.put("Start", istar);
+        output.put("End", jstar);
+        output.put("Sum", lef_maxsum+right_maxsum);
+        return output;
     }
 }
