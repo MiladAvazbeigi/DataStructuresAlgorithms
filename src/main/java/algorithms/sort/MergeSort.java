@@ -1,7 +1,7 @@
 package algorithms.sort;
 
 public class MergeSort <T extends Comparable<T>>{
-    private T[] sort_array=null;
+    private T[] sort_array;
 
     // -----------------------------
     // Region: getArray and setArray
