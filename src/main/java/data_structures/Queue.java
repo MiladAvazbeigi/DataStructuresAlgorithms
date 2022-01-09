@@ -97,7 +97,7 @@ public class Queue {
     public String toString(){
         StringBuilder output_srt = new StringBuilder();
         if(this.head==null){
-            output_srt = new StringBuilder("'Stack' class instance: empty stack!");
+            output_srt = new StringBuilder("Queue{}");
         }else{
             var current_node = this.head;
             output_srt.append("Queue{");

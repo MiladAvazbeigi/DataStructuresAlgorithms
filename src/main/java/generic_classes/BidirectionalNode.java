@@ -15,18 +15,32 @@ public class BidirectionalNode<U>{
     // End Region: Constructors
     // ------------------------
 
-    // -----------------------------
-    // Region: getValue and setValue
-    // -----------------------------
+    // ---------------------------
+    // Region: getters and setters
+    // ---------------------------
     public U getValue() {
         return this.value;
     }
     public void setValue(U value) {
         this.value = value;
     }
-    // ---------------------------------
-    // End Region: getValue and setValue
-    // ---------------------------------
+
+    public void setNext(BidirectionalNode next) {
+        this.next = next;
+    }
+    public BidirectionalNode getNext() {
+        return next;
+    }
+
+    public void setPrevious(BidirectionalNode previous) {
+        this.previous = previous;
+    }
+    public BidirectionalNode getPrevious() {
+        return previous;
+    }
+    // -------------------------------
+    // End Region: getters and setters
+    // -------------------------------
 
     // ----------------
     // Region: toString
