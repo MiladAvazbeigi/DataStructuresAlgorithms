@@ -96,13 +96,13 @@ public class Stack{
             output_srt = new StringBuilder("'Stack' class instance: empty stack!");
         }else{
             var current_node = this.head;
-            output_srt.append("========\n");
+            output_srt.append("Stack{");
             output_srt.append(current_node.getValue());
             while(current_node.next != null){
                 current_node = current_node.next;
-                output_srt.append("\n^\n"+current_node.getValue());
+                output_srt.append("<="+current_node.getValue());
             }
-            output_srt.append("\n========");
+            output_srt.append("}");
         }
         return output_srt.toString();
     }
